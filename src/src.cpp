@@ -168,10 +168,12 @@ vector<string> user::getip()
 {
     return IP;
 }
-void user::setip(vector<user> &v ,string s)
+void user::setip(vector<user> &v ,vector<string> &s)
 {
+    for(int z = 0; z < v.size() ; z++)
+    {
     vector<string>d;
-    brain(s,d,'.');
+    brain(s[z],d,'.');
     if(d.size()>4)
     {
         cout<<"not valid IP"<<endl;
@@ -182,7 +184,7 @@ void user::setip(vector<user> &v ,string s)
         vector<string>v1=v[i].getip(); 
         for(int j = 0 ; j < v1.size() ;j++)
         {
-            if(s==v1[j])
+            if(s[z]==v1[j])
             {
                 cout<<"tekrary"<<endl;
                 return;
@@ -199,6 +201,7 @@ void user::setip(vector<user> &v ,string s)
             return;
         }
     }
-    IP.push_back(s);
+    IP.push_back(s[z]);
     return;
+    }
 }

@@ -6,8 +6,8 @@ class Bank
 {
     private:
     std::vector<user> s;
-    
+
     public:
-    void setuser(std::string);
+    void setuser(user);
 };
 #endif // !BANK_HPP

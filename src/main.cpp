@@ -8,10 +8,8 @@
 #include "Bank.hpp"
 using namespace std;
 
-void Bank::setuser(string name)
+void Bank::setuser(user d)
 {
-    user d;
-
     s.push_back(d);
 }
 int main()

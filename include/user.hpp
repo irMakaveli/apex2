@@ -13,9 +13,9 @@ class user
     int enddate=0;
     int money=0;
     public:
-    void setusername(std::vector<user>& , std::string);//
+    void setusername(std::vector<user>& ,std::string);//
     std::string getusername();//
-    void setip(std::vector<user> &,std::string);//
+    void setip(std::vector<user> &,  std::vector<std::string> & );//
     std::vector<std::string> getip();//
     void setcardnumber(std::vector<user>&);//
     int getcardnumber();//
