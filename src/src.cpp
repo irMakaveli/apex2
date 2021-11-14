@@ -10,7 +10,7 @@ void brain(string str, vector<string> & v , char ch)
     string temp;
     for(int i = 0 ; i <= str.size() ; i++)
     {
-        if(str[i] != ch)
+        if(str[i] != ch && str[i]!=' ')
         {
             temp+=str[i];
         }
@@ -18,7 +18,7 @@ void brain(string str, vector<string> & v , char ch)
         {
             v.push_back(temp);
             temp="";
-        }
+        }   
     }
 }
 vector<string> getcomand()
@@ -131,23 +131,23 @@ void user::setcardnumber(vector<user>&d)
         }
     }
 }
-string user::getusername()
+string user::getusername() const
 {
     return this->Username;
 }
-void user::setusername(vector<user>& v,string s)
+bool user::setusername(vector<user>const & v,string s)
 {
     if(s[0]>='0'&&s[0]<='9')
     {
         cout<<"user name can not start with numbers"<<endl;
-        return;
+        return false;
     }
     for(int i=0 ; i < v.size() ; i++)
     {
         if(s == v[i].getusername())
         {
             cout<<"tekrary"<<endl;
-            return;
+            return false;
         }
     }
     for(int i = 0 ; i<s.size() ; i++)
@@ -159,49 +159,56 @@ void user::setusername(vector<user>& v,string s)
         else
         {
             cout<<"user name must genareted by a(A) to z(Z) and under_line"<<endl;
-            return;
+            return false;
         }
     }
     this->Username = s;
+    return true;
 }
-vector<string> user::getip()
+vector<string> user::getip() const
 {
     return IP;
 }
-void user::setip(vector<user> &v ,vector<string> &s)
+bool user::setip(vector<user>const &v ,vector<string> &s)
 {
-    for(int z = 0; z < v.size() ; z++)
+    for(int z = 1; z < s.size() ; z++)
     {
-    vector<string>d;
-    brain(s[z],d,'.');
-    if(d.size()>4)
-    {
-        cout<<"not valid IP"<<endl;
-        return;
-    }   
-    for(int i=0 ; i < v.size() ;i++)
-    {
-        vector<string>v1=v[i].getip(); 
-        for(int j = 0 ; j < v1.size() ;j++)
+        if(s[z].find('.')<=s[1].size())
         {
-            if(s[z]==v1[j])
+        vector<string>d;
+        brain(s[z],d,'.');
+        if(d.size()>4)
+        {
+            cout<<"not valid IP"<<endl;
+            return false;
+        }   
+        for(int i=0 ; i < v.size() ;i++)
+        {
+            vector<string>v1=v[i].getip(); 
+            for(int j = 0 ; j < v1.size() ;j++)
             {
-                cout<<"tekrary"<<endl;
-                return;
+                if(s[z]==v1[j])
+                {
+                    cout<<"tekrary"<<endl;
+                    return false;
+                }
             }
         }
-    }
-    int c;
-    for(int i = 0 ; i<d.size() ;i++)
-    {
-        stringstream(d[i])>>c;
-        if(c>255 || c <0)
+        int c;
+        for(int i = 0 ; i<d.size() ;i++)
         {
-            cout<<"not suitable number for IP"<<endl;
-            return;
+            stringstream(d[i])>>c;
+            if(c>=255 || c <=0)
+            {
+                cout<<"not suitable number for IP"<<endl;
+                return false;
+            }
+        }
         }
     }
-    IP.push_back(s[z]);
-    return;
+    for (size_t i = 2; i < s.size(); i++)
+    {
+     IP.push_back(s[i]);
     }
+    return true;
 }

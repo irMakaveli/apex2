@@ -12,11 +12,14 @@ class user
     int startdate=0;
     int enddate=0;
     int money=0;
+    int loan=0;
     public:
-    void setusername(std::vector<user>& ,std::string);//
-    std::string getusername();//
-    void setip(std::vector<user> &,  std::vector<std::string> & );//
-    std::vector<std::string> getip();//
+    void setloan(int);
+    int getloan();
+    bool setusername(std::vector<user>const & ,std::string);//
+    std::string getusername()const;//
+    bool setip(std::vector<user> const &,  std::vector<std::string> & );//
+    std::vector<std::string> getip() const;//
     void setcardnumber(std::vector<user>&);//
     int getcardnumber();//
     void setstartdate();//
