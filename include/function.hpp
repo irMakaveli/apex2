@@ -3,6 +3,9 @@
 #include <string>
 #include "Bank.hpp"
 #include "user.hpp"
-void brain(std::string str, std::vector<std::string> & , char);
+
+std::vector<std::string>  brain(std::string , std::vector<std::string> & , char);
 bool renewal(Bank &, int);
+void printuserinfo(Bank & , int);
+void print(Bank & , std::string);
 #endif // !

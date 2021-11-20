@@ -6,23 +6,31 @@
 
 #IncludeRegexTransform: 
 
+../include/Bank.hpp
+vector
+-
+user.hpp
+../include/user.hpp
+
+../include/function.hpp
+string
+-
+Bank.hpp
+../include/Bank.hpp
+user.hpp
+../include/user.hpp
+
 ../include/user.hpp
 vector
 -
 string
 -
 
-/home/system64/html/apex2/src/src.cpp
+/home/system64/html/apex2/src/function.cpp
 iostream
 -
+function.hpp
+/home/system64/html/apex2/src/function.hpp
 vector
 -
-ctime
--
-sstream
--
-random
--
-user.hpp
-/home/system64/html/apex2/src/user.hpp
 

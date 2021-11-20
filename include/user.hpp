@@ -2,7 +2,12 @@
 #define USER_HPP
 #include <vector>
 #include <string>
-std::vector<std::string> getcomand();
+struct transaction
+{
+    int money;
+    std::string type;
+    int date;
+};
 class user
 {
     private:
@@ -14,15 +19,12 @@ class user
     int enddate;
     int money;
     int loan;
-    int profitstime;
     public:
     user(int);
+    bool setprofits();
     void Transaction(transaction *);
     std::vector<transaction *> GetTransaction();
-    void setprofits();
-    void setprofitstime();
-    int getprofitstime();
-    void setloan(int);
+    void setloan(int , bool);
     int getloan();
     bool setusername(std::vector<user>const & ,std::string);//
     std::string getusername()const;//

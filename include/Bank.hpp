@@ -2,12 +2,6 @@
 #define BANK_HPP
 #include<vector>
 #include "user.hpp"
-struct transaction
-{
-    int money;
-    int date;
-    string type="NULL";
-};
 class Bank
 {
     private:
@@ -24,6 +18,6 @@ class Bank
     void setuser(user);
     int getuserindex(std::string const &) const;
     int getipindex(std::string const & , int) const;
-    std::vector<user> getuser();
+    std::vector<user> &getuser();
 };
 #endif // !BANK_HPP

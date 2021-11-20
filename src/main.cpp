@@ -17,13 +17,18 @@ int main()
 {
   
     Bank bank;
+    while(true)
+    {
     cout<<"enter your command"<<endl;
     string s,str;
-    cin>>s>>str;
+    cin>>s;
     if(s=="create")
     {
+        cin>>str;
+        cout<<"hi"<<endl;
         user d(0);
         vector<string>s1;
+        brain(str , s1, ':');
         if (d.setusername(bank.getuser() , s1[0])==true && d.setip(bank.getuser(),s1) )
         {
             d.setcardnumber(bank.getuser());
@@ -36,9 +41,11 @@ int main()
     }
     if(s=="add_ip")
     {
+       cin>>str;
        vector <string>s2;
        brain(str,s2,':');
        int c = bank.getuserindex(s2[0]);
+       cout<<c<<"c";
        bank.getuser()[c].setip(bank.getuser() , s2);
     }
     if(s=="renewal")
@@ -71,12 +78,13 @@ int main()
        if(c >= 0)
        {
            if(bank.getipindex(s2[1] , c) >=0)
-           {
+           {cout<<"k";
                int money ;
                stringstream(s2[2])>>money;
-               if(bank.getuser()[c].getstatus())
+               if(bank.getuser()[c].getstatus()==true)
                {
                    bank.getuser()[c].setmoney(money);
+                   cout<<money<<endl;
                }   
                else if(renewal(bank , c)) 
                {
@@ -155,8 +163,14 @@ int main()
         int c = bank.getuserindex(str);
         if(c >= 0)
         {
-            bank.getuser()[c].setprofits();
+            int c1 = bank.getuser()[c].getmoney();
+            if(bank.getuser()[c].setprofits())
+            {
+                int c2 = bank.getuser()[c].getmoney();
+                bank.getuser()[c].Transaction(bank.setTransaction(c2-c1 , "profits"));
+            }
         }
+
     }
     if(s=="get_loan")
     {
@@ -166,5 +180,8 @@ int main()
     {
         
     } 
+    print(bank,"s");
+    }
+
     return 0;
 }

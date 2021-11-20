@@ -10,7 +10,6 @@ using namespace std;
 user::user(int i)
 {
     setstartdate();
-    setprofitstime();
     this->money=i;
     this->loan=i;
 }
@@ -22,23 +21,91 @@ vector<transaction *> user::GetTransaction()
 {
     return t;
 }
-void user::setprofits()
+void user::setloan(int i, bool b)
 {
-    
-   if(time(NULL) > getprofitstime() + 30)
-   {
-       int money = getmoney();
-       int profit = (10 * money)/100 + money;
-       setmoney(profit);
-   } 
+    if(i < 0)
+    {
+        cout<<"wrong value"<<endl;
+        return;
+    }
+    if(b == true)
+    {
+        this->loan += getmoney(i);
+        return ;
+    }
+    else if(i <= 3*getmoney()/4 && b)
+    {
+        loan += getmoney(i);
+        return ;
+    }
+    else
+    {
+        cout<<"you have not enough money"<<endl;
+        return;
+    }
 }
-void user::setprofitstime()
+bool user::setprofits()
 {
-    profitstime = time(NULL);
+    int profits = 10;
+    if(getloan()!=0)
+    {
+        cout<<"first pay your loan"<<endl;
+        return false;
+    }
+    int t = time(NULL);
+    vector<transaction*> s;
+    s= GetTransaction();
+    bool prfit = true;
+    int mid=getmoney();
+    int count = 0;
+    for(int i = s.size() -1 ;s[i]->date >= t-14 && s[i]->date < t; i--)
+    {
+        if(s[i]->type=="withdraw" || s[i]->type.find("transfer")==0)
+        {
+            mid -= s[i]->money;
+            count++;
+        }
+        if(s[i]->type=="deposot" || s[i]->type=="profits")
+        {
+            mid += s[i]->money;
+            count++;
+        }
+        int c;
+        if(prfit && s[i]->type != "withdraw" && s[i]->type != "profits" && s[i]->type.find("transfer")!=0)
+        {
+            prfit =true;
+        }
+        else
+        {
+            prfit = false;
+        }
+    }
+    profits = (prfit) ? 15 : 10;
+    if(getmoney() >= 10000000)
+    {
+        profits+=5;
+    }
+    for(int  i = s.size()-1 ; s[i]->date + 60 <= t ;i-- )
+    { 
+       
+        if(s[i]->type == "profits")
+        {
+            cout<<"you get your profits recently"<<endl;
+            return false; 
+        }
+        else if(s[i]->type == "loan")
+        {
+            cout<<"first pay your loan"<<endl;
+            return false;
+        }
+    }
+    mid = mid/count +getmoney();
+    setmoney(profits*mid/100 + getmoney());
+    return true;
 }
-int user::getprofitstime()
+int user::getloan()
 {
-    return this->profitstime;
+    return this->loan;
 }
 bool user::getstatus() const
 {
@@ -133,6 +200,7 @@ void user::setcardnumber(vector<user>const &d)
             break;
         }
     }
+    cout<<cardnumber;
 }
 string user::getusername() const
 {
@@ -170,17 +238,14 @@ bool user::setusername(vector<user>const & v,string s)
 }
 vector<string> user::getip() const
 {
-    return IP;
+    return this->IP;
 }
 bool user::setip(vector<user>const &v ,vector<string> const & s)
 {
-
     for(int z = 1; z < s.size() ; z++)
     {
-        if(s[z].find('.')<=s[1].size())
-        {
         vector<string>d;
-        brain(s[z],d,'.');
+        brain(s[z],d,'.');       
         if(d.size()>4)
         {
             cout<<"not valid IP"<<endl;
@@ -199,7 +264,7 @@ bool user::setip(vector<user>const &v ,vector<string> const & s)
             }
         }
         int c;
-        for(int i = 0 ; i<d.size() ;i++)
+        for(int i = 0 ; i<d.size() ;i++)//
         {
             stringstream(d[i])>>c;
             if(c>=255 || c <=0)
@@ -208,15 +273,16 @@ bool user::setip(vector<user>const &v ,vector<string> const & s)
                 return false;
             }
         }
-        }
+        
     }
-    for (size_t i = 2; i < s.size(); i++)
+    cout<<"5+5"<<endl;
+    for (size_t i = 1; i < s.size(); i++)
     {
-     IP.push_back(s[i]);
+        IP.push_back(s[i]);
+    }
+    for (size_t i =0; i < IP.size(); i++)
+    {
+     cout<<IP[i]<<endl;
     }
     return true;
-}
-void user::setloan(int l)
-{
-
 }
