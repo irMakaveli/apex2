@@ -157,7 +157,7 @@ void user::setenddate(int t)
 {
     if(t>0 && t <= 5)//har 1 sal 5 min
     {
-        this->enddate+=t*5*60;
+        this->enddate= getstartdate()+t*730;
     }
     else
     {
@@ -269,20 +269,15 @@ bool user::setip(vector<user>const &v ,vector<string> const & s)
             stringstream(d[i])>>c;
             if(c>=255 || c <=0)
             {
-                cout<<"not suitable number for IP"<<endl;
+                cout<<"not suitable number for IP "<<"\""<<s[z]<<"\""<<endl;
                 return false;
             }
         }
         
     }
-    cout<<"5+5"<<endl;
     for (size_t i = 1; i < s.size(); i++)
     {
         IP.push_back(s[i]);
-    }
-    for (size_t i =0; i < IP.size(); i++)
-    {
-     cout<<IP[i]<<endl;
     }
     return true;
 }

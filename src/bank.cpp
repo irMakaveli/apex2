@@ -63,7 +63,7 @@ int Bank::getipindex(std::string const & ip, int index) const
     {
         cout<<s[index].getip()[i];  
         cout<<ip;
-        if(s[index].getip()[i]==ip)
+        if(s[index].getip()[i].find(ip) <= 3)
         {
             cout<<"i"<<i<<endl;
                return i;

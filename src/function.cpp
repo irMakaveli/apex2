@@ -91,11 +91,11 @@ void printuserinfo(Bank & bank, int i)
         cout<<"user loan : "<<bank.getuser()[i].getloan()<<endl;
         cout<<"user money : "<<bank.getuser()[i].getmoney()<<endl;
         cout<<"cardnumber : "<<bank.getuser()[i].getcardnumber()<<endl;
-        cout<<"accout created "<<(bank.getuser()[i].getstartdate()-time(NULL))/2<<" days ago"<<endl;
+        cout<<"accout created "<<(time(NULL)-bank.getuser()[i].getstartdate())/2<<" days ago"<<endl;
         if(bank.getuser()[i].getstatus()==true)
         {
             cout<<"account expiration date : "<<
-            (bank.getuser()[i].getenddate()-bank.getuser()[i].getstartdate())/2
+            (bank.getuser()[i].getenddate()-time(NULL))/2
             <<"days later"<<endl;
         }
         vector<transaction *>d =  bank.getuser()[i].GetTransaction();

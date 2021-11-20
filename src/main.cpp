@@ -15,11 +15,10 @@ void Bank::setuser(user d)
 }
 int main()
 {
-  
     Bank bank;
     while(true)
     {
-    cout<<"enter your command"<<endl;
+    cout<<"Enter your command"<<endl;
     string s,str;
     cin>>s;
     if(s=="create")
@@ -50,6 +49,7 @@ int main()
     }
     if(s=="renewal")
     {
+        cin >>str;
         vector <string>s2;
         brain(str,s2,':');
         int c = bank.getuserindex(s2[0]); 
@@ -95,6 +95,7 @@ int main()
     }
     if(s=="withdraw")
     {
+       cin>>str;
        vector<string>s2;
        brain(str , s2 , ':');
        int c = bank.getuserindex(s2[0]);
@@ -121,9 +122,9 @@ int main()
         vector<string> s2;
         brain(str , s2 , ':');
         int c = bank.getuserindex(s2[0]);    
-        if(c >= 0){}
+        if(c < 0){}
         int c2 = bank.getipindex(s2[1],c);
-        if(c2>=0){}
+        if(c2<0){return;}
         int c3;
         if(s2[2].find('.') <= s2[2].size())
         {
@@ -146,6 +147,7 @@ int main()
                     break;
                 }
             }
+            cout<<"user not find"<<endl;
         }
         int c4;
         stringstream(s2[3])>>c4;
@@ -167,7 +169,10 @@ int main()
             if(bank.getuser()[c].setprofits())
             {
                 int c2 = bank.getuser()[c].getmoney();
+                if(bank.getuser()[c].setprofits())
                 bank.getuser()[c].Transaction(bank.setTransaction(c2-c1 , "profits"));
+                else
+                return;
             }
         }
 
