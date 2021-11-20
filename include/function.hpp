@@ -2,5 +2,7 @@
 #define FUNCTION_HPP
 #include <string>
 #include "Bank.hpp"
-int * FindUserIndex(std::string ,std::string,Bank);
+#include "user.hpp"
+void brain(std::string str, std::vector<std::string> & , char);
+bool renewal(Bank &, int);
 #endif // !

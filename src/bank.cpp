@@ -3,39 +3,50 @@
 #include <string>
 #include "Bank.hpp"
 using namespace std;
-void setprofits(int);
-int getprofits();
 void setbankmoney(int);
 int getbankmoney();
 int getbankmoney(int);
 int getusernumber();
 void setuser(user);
-vector<user> Bank::getuser() 
+transaction * Bank::setTransaction(int money, string str)
 {
-    return this->s;
+    transaction tn;
+    tn.date = time(NULL);
+    tn.money = money;
+    tn.type = str;
+    tr.push_back(tn);
+    return &tr[tr.size()-1];
 }
-int * Bank::FindUserIndex(std::string un,std::string ip)
+vector<transaction> Bank::gettransaction()
 {
-    int index[2]={-1,-1};
+    return this->tr;
+}
+
+int Bank::getuserindex(std::string const & name) const
+{
     for (size_t i = 0; i < s.size(); i++)
     {
-        if(un==s[i].getusername())
+        if(s[i].getusername()==name)
         {
-            
-            for (size_t j = 0; j < s[i].getip().size(); j++)
-            {
-                if(s[i].getip()[j]==ip)
-                {
-                    index[0] = i;
-                    index[1]=j;
-                    return index;
-                }
-            }
-            cout<<"your ip not find"<<endl;
-            return index;
-        }        
-        cout<<"user name not find"<<endl;
-        return index;
+            return i;
+        }
     }
-    
+    cout <<"user name not find"<<endl;
+    return -1;
 }
+int Bank::getipindex(std::string const & ip, int index) const
+{
+    for (size_t i = 0; i< s.size(); i++)
+    {
+        if(s[index].getip()[i]==ip)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+vector<user> Bank::getuser() 
+{
+    return s;
+}
+

@@ -6,22 +6,30 @@ std::vector<std::string> getcomand();
 class user
 {
     private:
+    std::vector<transaction *>t;
     std::string Username;
     std::vector<std::string> IP;
-    int cardnumber=0;
-    int startdate=0;
-    int enddate=0;
-    int money=0;
-    int loan=0;
+    int cardnumber;
+    int startdate;
+    int enddate;
+    int money;
+    int loan;
+    int profitstime;
     public:
+    user(int);
+    void Transaction(transaction *);
+    std::vector<transaction *> GetTransaction();
+    void setprofits();
+    void setprofitstime();
+    int getprofitstime();
     void setloan(int);
     int getloan();
     bool setusername(std::vector<user>const & ,std::string);//
     std::string getusername()const;//
-    bool setip(std::vector<user> const &,  std::vector<std::string> & );//
+    bool setip(std::vector<user> const & ,std::vector<std::string>const & );//
     std::vector<std::string> getip() const;//
-    void setcardnumber(std::vector<user>&);//
-    int getcardnumber();//
+    void setcardnumber(std::vector<user>const &) ;//
+    int getcardnumber() const;//
     void setstartdate();//
     int getstartdate();//
     void setenddate(int);//

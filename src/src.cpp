@@ -4,43 +4,42 @@
 #include <sstream>
 #include <random>
 #include "user.hpp"
+#include "function.hpp"
 using namespace std;
-void brain(string str, vector<string> & v , char ch)
-{
-    string temp;
-    for(int i = 0 ; i <= str.size() ; i++)
-    {
-        if(str[i] != ch && str[i]!=' ')
-        {
-            temp+=str[i];
-        }
-        if(str[i]==ch || str[i]=='\0' || str[i] == ' ')
-        {
-            v.push_back(temp);
-            temp="";
-        }   
-    }
-}
-vector<string> getcomand()
-{
-    char ch[100];
-    string temp;
-    cout<<"Enter command"<<endl;
-    for(int i =0; ; i++)
-    {
-        if((ch[i] = cin.get())!='\n')
-        {
-            temp+=ch[i];
-        }
-        else{
-            break;
-        }
-    }
-    vector<string>s;
-    brain(temp , s ,':');
-    return s;
-}
 
+user::user(int i)
+{
+    setstartdate();
+    setprofitstime();
+    this->money=i;
+    this->loan=i;
+}
+void user::Transaction(transaction * trs)
+{
+    t.push_back(trs);
+}
+vector<transaction *> user::GetTransaction()
+{
+    return t;
+}
+void user::setprofits()
+{
+    
+   if(time(NULL) > getprofitstime() + 30)
+   {
+       int money = getmoney();
+       int profit = (10 * money)/100 + money;
+       setmoney(profit);
+   } 
+}
+void user::setprofitstime()
+{
+    profitstime = time(NULL);
+}
+int user::getprofitstime()
+{
+    return this->profitstime;
+}
 bool user::getstatus() const
 {
     if(time(NULL)>getenddate())
@@ -55,6 +54,10 @@ bool user::getstatus() const
 }
 int user::getmoney(int i)
 {
+    if(getstatus()==false)
+    {
+        return 0;
+    }
     if(i > this->money)
     {
         cout<<"you have not enough money"<<endl;
@@ -67,9 +70,9 @@ int user::getmoney(int i)
 }
 void user::setmoney(int m)
 {
-    if(m > 0 && m < 1000000)
+    if(m >= 0 && m <= 1000000)
     {
-        this->money=m;
+        this->money += m;
     }
     else{
         cout<<"wrong variable"<<endl;
@@ -85,13 +88,13 @@ int user::getenddate()const
 }
 void user::setenddate(int t)
 {
-    if(t>0 && t < 5)//har 1 sal 5 min
+    if(t>0 && t <= 5)//har 1 sal 5 min
     {
         this->enddate+=t*5*60;
     }
     else
     {
-        cout<<"1 or 5"<<endl;
+        cout<<"wrong value"<<endl;
     }
 }
 int user::getstartdate()
@@ -104,11 +107,11 @@ void user::setstartdate()
     setenddate(2);
     return;
 }
-int user::getcardnumber()
+int user::getcardnumber() const
 {
    return this->cardnumber;
 }
-void user::setcardnumber(vector<user>&d)
+void user::setcardnumber(vector<user>const &d) 
 {
     random_device cn;
     mt19937 eng(cn());
@@ -126,7 +129,7 @@ void user::setcardnumber(vector<user>&d)
         }
         if(c!=0)
         {
-            this->cardnumber=c;
+            cardnumber=c;
             break;
         }
     }
@@ -169,8 +172,9 @@ vector<string> user::getip() const
 {
     return IP;
 }
-bool user::setip(vector<user>const &v ,vector<string> &s)
+bool user::setip(vector<user>const &v ,vector<string> const & s)
 {
+
     for(int z = 1; z < s.size() ; z++)
     {
         if(s[z].find('.')<=s[1].size())
@@ -211,4 +215,8 @@ bool user::setip(vector<user>const &v ,vector<string> &s)
      IP.push_back(s[i]);
     }
     return true;
+}
+void user::setloan(int l)
+{
+
 }

@@ -6,100 +6,165 @@
 #include <random>
 #include "user.hpp"
 #include "Bank.hpp"
+#include "function.hpp"
 using namespace std;
 void Bank::setuser(user d)
 {
     s.push_back(d);
+    
 }
 int main()
 {
   
     Bank bank;
-    vector<string>s;
-    s = getcomand();
-    for (size_t i = 0; i < s.size(); i++)
+    cout<<"enter your command"<<endl;
+    string s,str;
+    cin>>s>>str;
+    if(s=="create")
     {
-        cout<<s[i]<<"*"<<endl;
-    }
-    
-    if(s[0]=="create")
-    {
-        
-        user d;
-        //d.setusername(bank.getuser() , s[1]);
-        if (d.setusername(bank.getuser() , s[1])&& d.setip(bank.getuser(),s) )
+        user d(0);
+        vector<string>s1;
+        if (d.setusername(bank.getuser() , s1[0])==true && d.setip(bank.getuser(),s1) )
         {
+            d.setcardnumber(bank.getuser());
+            bank.setuser(d);
             cout<<"user added succesfuly"<<endl;
         }
         else{
             cout<<"wrong information"<<endl;
         }
     }
-    if(s[0]=="add_ip")
+    if(s=="add_ip")
     {
-       int *index = bank.FindUserIndex(s[1],s[2]);
-       if (index[0]==-1 || index[2]==-1)
-       {
-           cout<<"i can not find"<<s[1]<<endl;
-       }
-       else
-       {
-           bank.getuser()[index[0]].setip(bank.getuser() , s);
-       }
-       
+       vector <string>s2;
+       brain(str,s2,':');
+       int c = bank.getuserindex(s2[0]);
+       bank.getuser()[c].setip(bank.getuser() , s2);
     }
-    if(s[0]=="renewal")
+    if(s=="renewal")
+    {
+        vector <string>s2;
+        brain(str,s2,':');
+        int c = bank.getuserindex(s2[0]); 
+        if(c>= 0 )
+        {
+            if(bank.getipindex(s2[1], c)>=0)
+            {
+                if(bank.getuser()[c].getstatus())
+                {
+                    cout<<"tarikh engheza-e hesabe shoma be payan naresideh"<<endl;  
+                    renewal(bank ,c);
+                }
+                else
+                {
+                    renewal(bank , c);
+                }
+            }
+        }
+    }
+    if(s=="deposit")
+    {
+       cin>>str;
+       vector<string>s2;
+       brain(str , s2 , ':');
+       int c = bank.getuserindex(s2[0]);
+       if(c >= 0)
+       {
+           if(bank.getipindex(s2[1] , c) >=0)
+           {
+               int money ;
+               stringstream(s2[2])>>money;
+               if(bank.getuser()[c].getstatus())
+               {
+                   bank.getuser()[c].setmoney(money);
+               }   
+               else if(renewal(bank , c)) 
+               {
+                   bank.getuser()[c].setmoney(money);
+               }            
+           }
+       }
+    }
+    if(s=="withdraw")
+    {
+       vector<string>s2;
+       brain(str , s2 , ':');
+       int c = bank.getuserindex(s2[0]);
+       if(c >= 0)
+       {
+           if(bank.getipindex(s2[1] , c) >=0)
+           {
+               int money ;
+               stringstream(s2[2])>>money;
+               if(bank.getuser()[c].getstatus())
+               {
+                   bank.getuser()[c].getmoney(money);
+               }   
+               else if(renewal(bank , c)) 
+               {
+                   bank.getuser()[c].getmoney(money);
+               }            
+           }
+       }
+    }
+    if(s=="transfer")
+    {
+        cin>>str;
+        vector<string> s2;
+        brain(str , s2 , ':');
+        int c = bank.getuserindex(s2[0]);    
+        if(c >= 0){}
+        int c2 = bank.getipindex(s2[1],c);
+        if(c2>=0){}
+        int c3;
+        if(s2[2].find('.') <= s2[2].size())
+        {
+            for (size_t i = 0; i < bank.getusernumber(); i++)
+            {
+                if(bank.getipindex(s2[2] , i)!=-1)
+                {
+                    c3 = i;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0 ; i < bank.getusernumber() ; i++)
+            {
+                if(bank.getuserindex(s2[2]) != -1)
+                {
+                    c3=i;
+                    break;
+                }
+            }
+        }
+        int c4;
+        stringstream(s2[3])>>c4;
+        string transfers = "";
+        bank.getuser()[c].getmoney(c4);
+        transfers = "transfer to "+bank.getuser()[c3].getusername();
+        bank.getuser()[c].Transaction(bank.setTransaction(c4 , transfers ));
+        bank.getuser()[c3].setmoney(c4);
+        transfers = "transfer from "+ bank.getuser()[c].getusername();
+        bank.getuser()[c3].Transaction(bank.setTransaction(c4 , transfers));
+    }
+    if(s=="add_profits")
+    {
+        cin>>str;
+        int c = bank.getuserindex(str);
+        if(c >= 0)
+        {
+            bank.getuser()[c].setprofits();
+        }
+    }
+    if(s=="get_loan")
     {
 
     }
-    if(s[0]=="deposit")
+    if(s=="pay_loan")
     {
-        int * index = bank.FindUserIndex(s[1] , s[2]);
-       if (index[0]==-1 || index[2]==-1)
-       {
-           cout<<"i can not find"<<s[1]<<endl;
-       }
-       else
-       {
-           int c;
-           stringstream(s[3])>>c;
-           bank.getuser()[index[0]].setmoney(c);
-       }
         
-    }
-    if(s[0]=="transfer")
-    {
-
-    }
-    if(s[0]=="withraw")
-    {
-
-        int * index = bank.FindUserIndex(s[1] , s[2]);
-       if (index[0]==-1 || index[2]==-1)
-       {
-           cout<<"i can not find"<<s[1]<<endl;
-       }
-       else
-       {
-           int c;
-           stringstream(s[3])>>c;
-           bank.getuser()[index[0]].getmoney(c);
-       }
-        
-    }
-    if(s[0]=="add_profits")
-    {
-
-    }
-    if(s[0]=="get_loan")
-    {
-
-    }
-    if(s[0]=="pay_loan")
-    {
-        
-    }
-
-  
+    } 
     return 0;
 }
