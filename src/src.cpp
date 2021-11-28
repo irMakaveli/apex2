@@ -6,18 +6,35 @@
 #include "user.hpp"
 #include "function.hpp"
 using namespace std;
-
+transaction trn;
 user::user(int i)
 {
     setstartdate();
-    this->money=i;
     this->loan=i;
 }
-void user::Transaction(transaction * trs)
+void transaction::settransaction(int i , string s)
 {
-    t.push_back(trs);
+    date = time(NULL)/2 ;
+    money = i;
+    type = s;
 }
-vector<transaction *> user::GetTransaction()
+int transaction::transactionmoney()
+{
+    return money;
+}
+int transaction::transactiondate()
+{
+    return date;
+}
+string transaction::transactiontype()
+{
+    return type;
+}
+void user::Transaction(transaction trs)
+{
+    t.push_back(trs);     
+}
+vector<transaction > &user::GetTransaction()
 {
     return t;
 }
@@ -53,54 +70,12 @@ bool user::setprofits()
         return false;
     }
     int t = time(NULL);
-    vector<transaction*> s;
-    s= GetTransaction();
+    cout <<"count";
+    vector<transaction> s;
+    s = GetTransaction();    
     bool prfit = true;
-    int mid=getmoney();
+    int mid;//=getmoney();
     int count = 0;
-    for(int i = s.size() -1 ;s[i]->date >= t-14 && s[i]->date < t; i--)
-    {
-        if(s[i]->type=="withdraw" || s[i]->type.find("transfer")==0)
-        {
-            mid -= s[i]->money;
-            count++;
-        }
-        if(s[i]->type=="deposot" || s[i]->type=="profits")
-        {
-            mid += s[i]->money;
-            count++;
-        }
-        int c;
-        if(prfit && s[i]->type != "withdraw" && s[i]->type != "profits" && s[i]->type.find("transfer")!=0)
-        {
-            prfit =true;
-        }
-        else
-        {
-            prfit = false;
-        }
-    }
-    profits = (prfit) ? 15 : 10;
-    if(getmoney() >= 10000000)
-    {
-        profits+=5;
-    }
-    for(int  i = s.size()-1 ; s[i]->date + 60 <= t ;i-- )
-    { 
-       
-        if(s[i]->type == "profits")
-        {
-            cout<<"you get your profits recently"<<endl;
-            return false; 
-        }
-        else if(s[i]->type == "loan")
-        {
-            cout<<"first pay your loan"<<endl;
-            return false;
-        }
-    }
-    mid = mid/count +getmoney();
-    setmoney(profits*mid/100 + getmoney());
     return true;
 }
 int user::getloan()

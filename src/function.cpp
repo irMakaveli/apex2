@@ -1,9 +1,104 @@
 #include <iostream>
 #include "function.hpp"
 #include <vector>
+#include <sstream>
 using namespace std;
+void create(Bank & bank)
+{
+    string str;
+    cin>>str;
+    cout<<"hi"<<endl;
+    user d(0);
+    vector<string>s1;
+    brain(str , s1, ':');
+    str = "0";
+    int c;
+    if(s1.size()>=3&&s1[s1.size()-1].find('.')>s1[s1.size()-1].size())
+    {
+        str = s1[s1.size()-1];
+        s1.pop_back();
+        stringstream(str)>>c;
+    }
+    if(d.setusername(bank.getuser() , s1[0])==true && d.setip(bank.getuser(),s1) )
+    { 
+        d.setmoney(c);
+        d.setcardnumber(bank.getuser());
+        bank.setuser(d);
+        cout<<"user added succesfuly"<<endl;
+    }
+    else{
+        cout<<"wrong ip or user name"<<endl;
+        return;
+    }
+}
+void addip(Bank & bank)
+{
+    string str;
+    cin>>str;
+    vector <string>s2;
+    brain(str,s2,':');
+    int c = bank.getuserindex(s2[0]);
+    cout<<c<<"c";
+    bank.getuser()[c].setip(bank.getuser() , s2);
+}
+void renewal(Bank & bank)
+{
+    string str;
+    cin >>str;
+    vector <string>s2;
+    brain(str,s2,':');
+    int c = bank.getuserindex(s2[0]); 
+    if(c>= 0 )
+    {
+        if(bank.getipindex(s2[1], c)>=0)
+        {
+            if(bank.getuser()[c].getstatus())
+            {
+                cout<<"tarikh engheza-e hesabe shoma be payan naresideh"<<endl;  
+                renewal(bank ,c);
+            }
+            else
+            {
+                renewal(bank , c);
+            }
+        }
+    }
+}
+void deposit(Bank & bank)
+{
+    string str;
+    cin>>str;
+    vector<string>s2;
+    brain(str , s2 , ':');
+    int c = bank.getuserindex(s2[0]);
+    if(c >= 0)
+    {
+        if(bank.getipindex(s2[1] , c) >=0)
+        {
+           int money ;
+           stringstream(s2[2])>>money;
+           transaction trs;
+           
+           
+           if(bank.getuser()[c].getstatus()==true)
+           {
+                trs.settransaction(money , "deposit");
+                bank.getuser()[c].setmoney(money);
+                bank.setTransaction(trs);
+                bank.getuser()[c].Transaction(trs);
+           }    
+           else if(renewal(bank , c)) 
+           {
+                bank.getuser()[c].setmoney(money);
+                bank.setTransaction(trs);
+                bank.getuser()[c].Transaction(trs);
+           }            
+        }
+    }
+}
 bool renewal(Bank &bank, int c)
 {
+    cout<<"are you want to pay 10000 and renewal your account? [y/n]"<<endl;
     char ch;
     cin>>ch;
     if(ch=='y')
@@ -24,6 +119,96 @@ bool renewal(Bank &bank, int c)
         return true;
     }
     return false;
+}
+void withdraw(Bank & bank)
+{
+    string str; 
+    cin>>str;
+    vector<string>s2;
+    brain(str , s2 , ':');
+    int c = bank.getuserindex(s2[0]);
+    if(c >= 0)
+    {
+        if(bank.getipindex(s2[1] , c) >=0)
+        {
+            int money ;
+            stringstream(s2[2])>>money;
+            if(bank.getuser()[c].getstatus())
+            {
+                bank.getuser()[c].getmoney(money);
+            }   
+            else if(renewal(bank , c)) 
+            {
+                bank.getuser()[c].getmoney(money);
+            }            
+        }
+    }
+}
+void transfer(Bank & bank)
+{
+    string str;
+    cin>>str;
+    vector<string> s2;
+    brain(str , s2 , ':');
+    int c = bank.getuserindex(s2[0]);    
+    if(c < 0){return;}
+    int c2 = bank.getipindex(s2[1],c);
+    if(c2<0){return;}
+    int c3;
+    if(s2[2].find('.') <= s2[2].size())
+    {
+        for (size_t i = 0; i < bank.getusernumber(); i++)
+        {
+            if(bank.getipindex(s2[2] , i)!=-1)
+            {
+                c3 = i;
+                break;
+            }
+        }
+    }
+    else
+    {
+        for(int i = 0 ; i < bank.getusernumber() ; i++)
+        {
+            if(bank.getuserindex(s2[2]) != -1)
+            {
+                c3=i;
+                break;
+            }
+        }
+        cout<<"user not find"<<endl;
+    }
+    int c4;
+    transaction trs;
+    stringstream(s2[3])>>c4;
+    string transfers = "";
+    bank.getuser()[c].getmoney(c4);
+    transfers = "transfer to "+bank.getuser()[c3].getusername();
+    trs.settransaction(c4,transfers);
+    bank.setTransaction(trs);
+
+    bank.getuser()[c3].setmoney(c4);
+    transfers = "transfer from "+ bank.getuser()[c].getusername();
+    trs.settransaction(c4 , transfers);
+    bank.getuser()[c].Transaction(trs);
+    bank.setTransaction(trs);
+}
+void addprofits(Bank & bank)
+{
+    string str;
+    cin>>str;
+    int c = bank.getuserindex(str);
+    cout<<c<<endl;
+    if(c >= 0)
+    {   transaction trs;
+        int c1 = bank.getuser()[c].getmoney();
+        if(bank.getuser()[c].setprofits())
+        {
+            int c2 = bank.getuser()[c].getmoney();
+            
+            //bank.getuser()[c].Transaction(bank.setTransaction(c2-c1 , "profits"));
+        }
+    }
 }
 vector<string> brain(string str, vector<string> & v , char ch)
 {
@@ -87,7 +272,6 @@ void printuserinfo(Bank & bank, int i)
         cout<<endl;
     }
         cout<<endl;
-
         cout<<"user loan : "<<bank.getuser()[i].getloan()<<endl;
         cout<<"user money : "<<bank.getuser()[i].getmoney()<<endl;
         cout<<"cardnumber : "<<bank.getuser()[i].getcardnumber()<<endl;
@@ -98,10 +282,8 @@ void printuserinfo(Bank & bank, int i)
             (bank.getuser()[i].getenddate()-time(NULL))/2
             <<"days later"<<endl;
         }
-        vector<transaction *>d =  bank.getuser()[i].GetTransaction();
-        for(int j = 0 ; j < d.size(); j++)
-        {
-            cout<<"transaction type : "<<d[j]->type<<" date : "<<d[j]->date<<" money : "<<d[j]->money<<endl;
-        }
-    
+       for(int j = 0 ; j< bank.getuser()[i].GetTransaction().size() ; j++)
+       cout<<(bank.getuser()[i].GetTransaction()[j].transactionmoney())<<"++"<<endl;
+       
+       bank.printing(i);
 }

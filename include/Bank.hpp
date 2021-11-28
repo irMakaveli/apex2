@@ -9,8 +9,8 @@ class Bank
     int bankmoney;
     std::vector<transaction> tr;
     public:
-    std::vector<transaction> gettransaction();
-    transaction * setTransaction(int , std::string);
+    std::vector<transaction>&gettransaction();
+    void setTransaction(transaction);
     void setbankmoney(int);
     int getbankmoney();
     int getbankmoney(int);
@@ -19,5 +19,6 @@ class Bank
     int getuserindex(std::string const &) const;
     int getipindex(std::string const & , int) const;
     std::vector<user> &getuser();
+    void printing(int);
 };
 #endif // !BANK_HPP

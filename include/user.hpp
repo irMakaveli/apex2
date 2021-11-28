@@ -2,16 +2,21 @@
 #define USER_HPP
 #include <vector>
 #include <string>
-struct transaction
+class transaction
 {
     int money;
     std::string type;
     int date;
+    public:
+    void settransaction(int ,std::string);
+    int transactionmoney();
+    int transactiondate();
+    std::string transactiontype();
 };
 class user
 {
     private:
-    std::vector<transaction *>t;
+    std::vector<transaction>t;
     std::string Username;
     std::vector<std::string> IP;
     int cardnumber;
@@ -22,8 +27,8 @@ class user
     public:
     user(int);
     bool setprofits();
-    void Transaction(transaction *);
-    std::vector<transaction *> GetTransaction();
+    void Transaction(transaction );
+    std::vector<transaction>& GetTransaction();
     void setloan(int , bool);
     int getloan();
     bool setusername(std::vector<user>const & ,std::string);//

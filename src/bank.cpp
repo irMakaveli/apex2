@@ -30,21 +30,28 @@ int Bank::getusernumber()
 {
     return s.size();
 }
-void setuser(user);
-transaction * Bank::setTransaction(int money, string str)
-{
-    transaction tn;
-    tn.date = time(NULL);
-    tn.money = money;
-    tn.type = str;
-    tr.push_back(tn);
-    return &tr[tr.size()-1];
-}
-vector<transaction> Bank::gettransaction()
-{
-    return this->tr;
-}
 
+void Bank::printing(int i)
+{
+    for(int j = 0 ; j < tr.size(); j++)
+    {
+        cout<<"j"<<j<<endl;
+        cout<<"transaction type : "<<tr[j].transactionmoney(); 
+    }
+}
+void Bank::setTransaction(transaction trs)
+{
+    tr.push_back(trs);
+    
+}
+vector<transaction>&Bank::gettransaction()
+{
+    return tr;
+}
+void Bank::setuser(user d)
+{
+    s.push_back(d);   
+}
 int Bank::getuserindex(std::string const & name) const
 {
     for (size_t i = 0; i < s.size(); i++)
