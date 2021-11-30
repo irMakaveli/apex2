@@ -19,6 +19,5 @@ class Bank
     int getuserindex(std::string const &) const;
     int getipindex(std::string const & , int) const;
     std::vector<user> &getuser();
-    void printing(int);
 };
 #endif // !BANK_HPP

@@ -70,6 +70,11 @@ void deposit(Bank & bank)
     cin>>str;
     vector<string>s2;
     brain(str , s2 , ':');
+    if(s2.size() <= 2)
+    {
+        cout<<"wrong command"<<endl;
+        return;
+    }
     int c = bank.getuserindex(s2[0]);
     if(c >= 0)
     {
@@ -202,34 +207,37 @@ void addprofits(Bank & bank)
     if(c >= 0)
     {   transaction trs;
         int c1 = bank.getuser()[c].getmoney();
+        cout<<c1<<endl;
         if(bank.getuser()[c].setprofits())
         {
-            int c2 = bank.getuser()[c].getmoney();
             
-            //bank.getuser()[c].Transaction(bank.setTransaction(c2-c1 , "profits"));
+            int c2 = bank.getuser()[c].getmoney();
+            trs.settransaction(c2-c1 , "profits");
+            bank.setTransaction(trs);
+            bank.getuser()[c].Transaction(trs);
         }
     }
 }
-vector<string> brain(string str, vector<string> & v , char ch)
+vector<string> brain(string str, vector<string > &d,char delim)
 {
-    string temp;
-    for(int i = 0 ; i <= str.size() ; i++)
+//this function give a string and separat with a delimiter and push back into vector
+    string temp;   
+    for (size_t i = 0,j =0 ;i <= str.size(); i++)
     {
-        
-        if(str[i] != ch )
+       
+        if(str[i]!=delim && str[i]!='\0' )
         {
-            temp += str[i];
+            temp+=str[i];
         }
-        if(str[i] == ch || str[i]=='\0')
-        {
-            v.push_back(temp);
-            temp="";
-        }   
-        if(str[i]=='\0')
-        break;
-    }
-    return v;
-}
+        else if(temp!=""){    
+
+            d.push_back(temp);
+            temp.erase();///clear string
+        }
+    }//end for
+ 
+    return d;
+}//end drain
 void print(Bank & bank , string s)
 {
     if(s.find('.')<= s.size())
@@ -263,13 +271,9 @@ void printuserinfo(Bank & bank, int i)
 {
     cout<<"user name : "<<bank.getuser()[i].getusername()<<endl;
     cout<<"user ip :"<<endl;
-    cout<<bank.getuser()[i].getip().size()<<endl;
-    for(int j = 1 ; j <= bank.getuser()[i].getip().size() ; j++)
+    for(int j = 0 ; j < bank.getuser()[i].getip().size() ; j++)
     {
-        cout<<bank.getuser()[i].getip()[j-1]<<"\t";
-    
-        if(j%3==0)
-        cout<<endl;
+        cout<<bank.getuser()[i].getip()[j]<<"\t";
     }
         cout<<endl;
         cout<<"user loan : "<<bank.getuser()[i].getloan()<<endl;
@@ -285,5 +289,4 @@ void printuserinfo(Bank & bank, int i)
        for(int j = 0 ; j< bank.getuser()[i].GetTransaction().size() ; j++)
        cout<<(bank.getuser()[i].GetTransaction()[j].transactionmoney())<<"++"<<endl;
        
-       bank.printing(i);
 }

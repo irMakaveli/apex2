@@ -31,14 +31,7 @@ int Bank::getusernumber()
     return s.size();
 }
 
-void Bank::printing(int i)
-{
-    for(int j = 0 ; j < tr.size(); j++)
-    {
-        cout<<"j"<<j<<endl;
-        cout<<"transaction type : "<<tr[j].transactionmoney(); 
-    }
-}
+
 void Bank::setTransaction(transaction trs)
 {
     tr.push_back(trs);

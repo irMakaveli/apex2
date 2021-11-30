@@ -63,19 +63,66 @@ void user::setloan(int i, bool b)
 }
 bool user::setprofits()
 {
+    vector<transaction> s;
+    s = GetTransaction(); 
     int profits = 10;
     if(getloan()!=0)
     {
         cout<<"first pay your loan"<<endl;
         return false;
     }
-    int t = time(NULL);
-    cout <<"count";
-    vector<transaction> s;
-    s = GetTransaction();    
+    
+    int t = time(NULL)/2;
     bool prfit = true;
-    int mid;//=getmoney();
+    int mid=0;
     int count = 0;
+    
+    for(int i = 0 , j = s.size()-1 ; i<7 ;i++)
+    {
+        if(t - i>= s[j].transactiondate())
+        {
+        mid+= s[j].transactionmoney(); 
+        count++;
+        }
+        if(t - i== s[j].transactiondate())
+        {
+            j--;
+            if(j<0)
+            break;
+        }  
+    }
+    for(int i = s.size()-1  ;t - 28 >= s[i].transactiondate() && i>=0; i--)
+    {
+        if(prfit && (s[i].transactiontype()!= "withdraw" && s[i].transactiontype()!= "profits" &&s[i].transactiontype().find("transfer")!=0))
+        {
+            prfit =true;
+        }
+        else
+        {
+            cout<<"false"<<endl;
+            prfit = false;
+        }
+    }
+    profits = (prfit) ? 15 : 10;
+    if(getmoney() >= 10000000)
+    {
+        profits+=5;
+    }
+    for(int  i = s.size()-1 ; t - s[i].transactiondate() <= 60 && i >= 0;i--)
+    { 
+        if(s[i].transactiontype() == "profits")
+        {
+            cout<<"you get your profits recently"<<endl;
+            return false; 
+        }
+        else if(s[i].transactiontype() == "loan")
+        {
+            cout<<"first pay your loan"<<endl;
+            return false;
+        }
+    }
+    mid = (mid/count+getmoney())*profits/100;
+    setmoney(mid );
     return true;
 }
 int user::getloan()
@@ -220,8 +267,16 @@ bool user::setip(vector<user>const &v ,vector<string> const & s)
     for(int z = 1; z < s.size() ; z++)
     {
         vector<string>d;
-        brain(s[z],d,'.');       
-        if(d.size()>4)
+        brain(s[z],d,'.');
+        int dotnumber=0;  
+        for(int i = 0; i <s[z].size( );i++)
+        {
+            if(s[z][i]=='.')
+            {
+                dotnumber++;
+            }
+        };   
+        if(d.size()>4 || dotnumber +1 != d.size())
         {
             cout<<"not valid IP"<<endl;
             return false;
@@ -241,12 +296,27 @@ bool user::setip(vector<user>const &v ,vector<string> const & s)
         int c;
         for(int i = 0 ; i<d.size() ;i++)//
         {
-            stringstream(d[i])>>c;
-            if(c>=255 || c <=0)
+            for(int j = 0 ; j < d[i].size() ; j++)
             {
-                cout<<"not suitable number for IP "<<"\""<<s[z]<<"\""<<endl;
+                cout<<d[i].size()<<"\t"<<d[i][j]<<endl;
+            if(d[i][j]>='0' && d[i][j]<='9')
+            {
+                stringstream(d[i])>>c;
+                if(c>0 && c <=255){continue;}
+                else
+                {
+                    cout<<"not suitable number for IP :"<<"\""<<s[z]<<"\""<<endl;
+                    return false;
+                }
+
+            }
+            else
+            {
+                cout<<"notttt suitable number for IP :"<<"\""<<s[z]<<"\""<<endl;
                 return false;
             }
+            }
+
         }
         
     }

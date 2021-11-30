@@ -1,44 +1,20 @@
-for(int i = 0  ;s[i]->date >= t-14 && s[i]->date < t; i++)
+/*
+int m=0;
+int t = yime(null)/2;
+for(int i = 7 , j = s.size()-1 ; i>=0 ;i--)
+{
+    if(t-s.back().transactiondate()<=i)
     {
-        if(s[i]->type=="withdraw" || s[i]->type.find("transfer")==0)
-        {
-            mid -= s[i]->money;
-            count++;
-        }
-        if(s[i]->type=="deposot" || s[i]->type=="profits")
-        {
-            mid += s[i]->money;
-            count++;
-        }
-        int c;
-        if(prfit && s[i]->type != "withdraw" && s[i]->type != "profits" && s[i]->type.find("transfer")!=0)
-        {
-            prfit =true;
-        }
-        else
-        {
-            prfit = false;
-        }
+       mid+= tansactionmoney(); 
     }
-    profits = (prfit) ? 15 : 10;
-    if(getmoney() >= 10000000)
+    else if(t-s[j].transactiondate() >i && t-s[j-1].transactiondate() <= i)
     {
-        profits+=5;
+        mid += s[j-1].transactiondate();
     }
-    for(int  i = s.size() ; s[i]->date + 60 <= t ;i++ )
-    { 
-       
-        if(s[i]->type == "profits")
-        {
-            cout<<"you get your profits recently"<<endl;
-            return false; 
-        }
-        else if(s[i]->type == "loan")
-        {
-            cout<<"first pay your loan"<<endl;
-            return false;
-        }
+    if(i == t-s.back().transactiondate())
+    {
+        j--;
+        if(j<0)
+        break;
     }
-    mid = mid/count +getmoney();
-    setmoney(profits*mid/100 + getmoney());
-    
+}*/
