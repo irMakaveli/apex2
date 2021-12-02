@@ -15,4 +15,6 @@ void transfer(Bank &);
 void addprofits(Bank &);
 void printuserinfo(Bank & , int);
 void print(Bank & , std::string);
+void getloan(Bank &);
+void payloan(Bank &);
 #endif // !

@@ -11,50 +11,62 @@ using namespace std;
 
 int main()
 {
-    Bank bank;
+    Bank bank(0);
+    
     while(true)
     {
-    cout<<"Enter your command"<<endl;
-    string s,str;
-    cin>>s;
-    if(s=="create")
-    {
-        create(bank);
-    }
-    if(s=="add_ip")
-    {
-        addip(bank);
-    }
-    if(s=="renewal")
-    {
-        renewal(bank);
-    }
-    if(s=="deposit")
-    {
-       deposit(bank);
-       
-    }
-    if(s=="withdraw")
-    {
-       withdraw(bank);
-    }
-    if(s=="transfer")
-    {
-        transfer(bank);
-    }
-    if(s=="add_profits")
-    {
-        addprofits(bank);
-    }
-    if(s=="get_loan")
-    {
+        cout<<"Enter your command"<<endl;
+        string s;
+        cin>>s;
+        if(s=="help")
+        {
+            //help();
+        }
+        if(s=="create")
+        {
+            create(bank);
+        }
+        else if(s=="add_ip")
+        {
+            addip(bank);
+        }
+        else if(s=="renewal")
+        {
+            renewal(bank);
+        }
+        else if(s=="deposit")
+        {
+            deposit(bank);
+        }
+        else if(s=="withdraw")
+        {
+            withdraw(bank);
+        }
+        else if(s=="transfer")
+        {
+            transfer(bank);
+        }
+        else if(s=="add_profits")
+        {
+            addprofits(bank);
+        }
+        else if(s=="get_loan")
+        {
+            getloan(bank);
+        }
+        else if(s=="pay_loan")
+        {
+            payloan(bank);
+        }
+        else if(s=="exit") 
+        {
+            break;
+        }
+        else
+        {
+            print(bank,s);
+        }
 
-    }
-    if(s=="pay_loan")
-    {
-        
-    } 
-    print(bank,"s");
     }
 
     return 0;

@@ -9,6 +9,7 @@ class Bank
     int bankmoney;
     std::vector<transaction> tr;
     public:
+    Bank(int);
     std::vector<transaction>&gettransaction();
     void setTransaction(transaction);
     void setbankmoney(int);
