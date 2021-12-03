@@ -79,7 +79,7 @@ bool user::setprofits()
         return false;
     }
     
-    int t = time(NULL)*2;//har 1 rooz 2 sanieh
+    int t = time(NULL);//har 1 rooz 2 sanieh
     bool prfit = true;
     int mid=0;//miangine hesab dar 7 rooze gozashteh
     int count = 0;
@@ -87,12 +87,12 @@ bool user::setprofits()
     {
         if(t - i>= s[j].transactiondate())//t - i yani i rooz ghabl
         {
-            if(s[j].transactiontype()!= "withdraw")//bardasht baethe kam shodan miangine hesab mishavad
+            if(s[j].transactiontype()== "withdraw")//bardasht baethe kam shodan miangine hesab mishavad
             {
                 mid -= s[j].transactionmoney();
                 count++;
             }
-            if(s[j].transactiontype()=="profits")//sood gereftan miangine hesab ra afzayesh midahad
+            if(s[j].transactiontype()=="profits" || s[j].transactiontype()=="deposit" )//sood gereftan miangine hesab ra afzayesh midahad
             {
                 mid += s[j].transactionmoney();
                 count++;
@@ -150,7 +150,7 @@ bool user::setprofits()
             return false;
         }
     }
-    mid = (mid/count+getmoney())*profits/100;//miangine hesab + mojoodi hesab * sood /100
+    mid = (mid/count)*profits/100;//miangine hesab * sood /100
     setmoney(mid );
     return true;
 }

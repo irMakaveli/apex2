@@ -6,7 +6,7 @@ using namespace std;
 void help()
 {
     cout<<"create new account :"<<endl
-    <<"create username:Ip or create username:IP:..:IP:money"<<endl
+    <<"create username:Ip or create username:IP:..:IP or create username:IP:..:IP:money"<<endl
     <<"add IP :"<<endl
     <<"add_ip username:IP or username:IP:IP:..."<<endl
     <<"renewall:"<<endl
@@ -19,8 +19,8 @@ void help()
     <<"get profits -> add_profits username"<<endl
     <<"get loan -> get_loan username:ip:money"<<endl
     <<"pay loan -> pay_loan username:money"<<endl
-    <<"help -> help"<<endl; 
-    <<"exit -> exit"<<endl
+    <<"help -> help"<<endl
+    <<"exit -> exit"<<endl;
 }
 void create(Bank & bank)//add a user
 {
@@ -30,8 +30,9 @@ void create(Bank & bank)//add a user
     vector<string>s1;
     brain(str , s1, ':');//separate str
     str = "0";//0 is default money
-    int c;
-    if(s1.size()>=3&&s1[s1.size()-1].find('.')>s1[s1.size()-1].size())//for same formats ->
+    int c=0;
+    transaction trs;
+    if(s1.size()>=3 && s1[s1.size()-1].find('.')>s1[s1.size()-1].size())//for same formats ->
     {// username:ip:ip:....:ip:money
         str = s1.back();//s1.back() is money 
         s1.pop_back(); 
@@ -42,6 +43,12 @@ void create(Bank & bank)//add a user
         d.setmoney(c);
         bank.setbankmoney(c);
         d.setcardnumber(bank.getuser());
+        if(c != 0)
+        {
+            trs.settransaction(c , "deposit");
+            bank.setTransaction(trs);
+            d.Transaction(trs);
+        }
         bank.setuser(d);//add user
         cout<<"user added succesfuly"<<endl;
         return;
@@ -306,7 +313,6 @@ void print(Bank & bank , string s)//print bank info
             int b = bank.getuserindex(s);
             if(b!= -1)
             {
-                cout<<bank.getuserindex(s)<< 0 <<bank.getusernumber()<<endl;
                 printuserinfo(bank ,  b );
                 return;
             }
@@ -359,7 +365,7 @@ void printuserinfo(Bank & bank, int i)
        for(int j = 0 ; j< bank.getuser()[i].GetTransaction().size() ; j++)
        cout<<"transaction type : " <<bank.getuser()[i].GetTransaction()[j].transactiontype()
            <<"\ttransaction money : "<<bank.getuser()[i].GetTransaction()[j].transactionmoney()
-           <<"\ttransaction date : " <<(time(NULL)-bank.getuser()[i].GetTransaction()[j].transactiondate())/2
+           <<"   transaction date : " <<(time(NULL)-bank.getuser()[i].GetTransaction()[j].transactiondate())/2
            <<" days ago"<<endl;
        //cout<<time(NULL);
 }
