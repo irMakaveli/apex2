@@ -18,11 +18,7 @@ int main()
         cout<<"Enter your command"<<endl;
         string s;
         cin>>s;
-        if(s=="help")
-        {
-            //help();
-        }
-        if(s=="create")
+        if(s=="create" && !bank.getbankruptcy())
         {
             create(bank);
         }
@@ -34,15 +30,15 @@ int main()
         {
             renewal(bank);
         }
-        else if(s=="deposit")
+        else if(s=="deposit" )
         {
             deposit(bank);
         }
-        else if(s=="withdraw")
+        else if(s=="withdraw" && !bank.getbankruptcy())
         {
             withdraw(bank);
         }
-        else if(s=="transfer")
+        else if(s=="transfer" && !bank.getbankruptcy())
         {
             transfer(bank);
         }
@@ -50,13 +46,17 @@ int main()
         {
             addprofits(bank);
         }
-        else if(s=="get_loan")
+        else if(s=="get_loan" && !bank.getbankruptcy())
         {
             getloan(bank);
         }
         else if(s=="pay_loan")
         {
             payloan(bank);
+        }
+        else if(s=="help")
+        {
+            help();
         }
         else if(s=="exit") 
         {

@@ -8,8 +8,13 @@ class Bank
     std::vector<user> s;
     int bankmoney;
     std::vector<transaction> tr;
+    bool bankruptcy;
+    int bankloan;
     public:
     Bank(int);
+    bool getbankruptcy();
+    bool getbankruptcy(int);
+    void setbankloan(int);
     std::vector<transaction>&gettransaction();
     void setTransaction(transaction);
     void setbankmoney(int);

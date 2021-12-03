@@ -17,4 +17,5 @@ void printuserinfo(Bank & , int);
 void print(Bank & , std::string);
 void getloan(Bank &);
 void payloan(Bank &);
+void help();
 #endif // !

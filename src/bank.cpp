@@ -11,8 +11,33 @@ void Bank::setbankmoney(int m)//set kardane mojoodie bank
     }
     bankmoney += m;
 }
+bool Bank::getbankruptcy(int i)
+{
+    if(i > bankmoney && bankloan != 0)
+    {
+        cout<<"bank have not money!!"<<endl;
+        bankruptcy = true;
+        return true;
+    }
+    return false;
+}
+bool Bank::getbankruptcy()
+{
+    return bankruptcy;
+}
+void Bank::setbankloan(int i)
+{
+    if(bankmoney > i && bankmoney + i >=0 )
+    {
+        bankloan += i;
+        if(bankloan == 0)
+        bankruptcy = false;
+    }
+}
 Bank::Bank(int)//constructor
 {
+    bankloan = 0;
+    bankruptcy = false;
     bankmoney = 0;
 }
 int Bank::getbankmoney()
@@ -23,7 +48,7 @@ int Bank::getbankmoney(int m)//bardasht az bank
 {
     if(m > bankmoney )
     {
-        cout<<"our bank heve not enough money"<<endl;
+        cout<<"the bank heve not enough money"<<endl;
         return 0;
     }
     bankmoney -= m;

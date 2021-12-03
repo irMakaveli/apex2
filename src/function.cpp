@@ -3,6 +3,25 @@
 #include <vector>
 #include <sstream>
 using namespace std;
+void help()
+{
+    cout<<"create new account :"<<endl
+    <<"create username:Ip or create username:IP:..:IP:money"<<endl
+    <<"add IP :"<<endl
+    <<"add_ip username:IP or username:IP:IP:..."<<endl
+    <<"renewall:"<<endl
+    <<"renewall username:ip"<<endl
+    <<"transactions :"<<endl
+    <<"deposit -> deposit username:ip:money"<<endl
+    <<"withdraw -> withdraw username:ip:money"<<endl
+    <<"transfer -> transfer sender_username:sender_ip:receiver_ip:money or "
+    <<"sender_username:sender_ip:receiver_username:money"<<endl
+    <<"get profits -> add_profits username"<<endl
+    <<"get loan -> get_loan username:ip:money"<<endl
+    <<"pay loan -> pay_loan username:money"<<endl
+    <<"help -> help"<<endl; 
+    <<"exit -> exit"<<endl
+}
 void create(Bank & bank)//add a user
 {
     string str;
@@ -21,6 +40,7 @@ void create(Bank & bank)//add a user
     if(d.setusername(bank.getuser() , s1[0])==true && d.setip(bank.getuser(),s1))//if data is valid
     { 
         d.setmoney(c);
+        bank.setbankmoney(c);
         d.setcardnumber(bank.getuser());
         bank.setuser(d);//add user
         cout<<"user added succesfuly"<<endl;
@@ -89,12 +109,15 @@ void deposit(Bank & bank)
            if(bank.getuser()[c].getstatus()==true)//check user status
            {
                 trs.settransaction(money , "deposit");
+                bank.setbankmoney(money);
                 bank.getuser()[c].setmoney(money);//deposit profits
                 bank.setTransaction(trs);//set transaction for bank
                 bank.getuser()[c].Transaction(trs);// set transacrion for user
            }    
            else if(renewal(bank , c))//if user renew account
            {
+                trs.settransaction(money , "deposit");
+                bank.getbankmoney(money);
                 bank.getuser()[c].setmoney(money);
                 bank.setTransaction(trs);
                 bank.getuser()[c].Transaction(trs);
@@ -109,11 +132,16 @@ bool renewal(Bank &bank, int c)
     cin>>ch;
     if(ch=='y')
     { 
+        transaction trs;
         if(bank.getuser()[c].getmoney() >= 100000)
         {
+            
             bank.getuser()[c].setenddate(2);
             bank.getuser()[c].getmoney(100000);
             bank.setbankmoney(100000);
+            trs.settransaction(100000 , "withdraw");
+            bank.setTransaction(trs);
+            bank.getuser()[c].Transaction(trs);
         }
         else
         {
@@ -122,6 +150,10 @@ bool renewal(Bank &bank, int c)
             bank.getuser()[c].getmoney(money);
             bank.setbankmoney(money);
             bank.getuser()[c].setloan(money ,true);
+            trs.settransaction(money , "get loan");
+            bank.setTransaction(trs);
+            bank.getuser()[c].Transaction(trs);
+            bank.setbankloan(money);
         }
         return true;
     }
@@ -140,13 +172,18 @@ void withdraw(Bank & bank)
         {
             int money ;
             stringstream(s2[2])>>money;
-            if(bank.getuser()[c].getstatus())
+            if(bank.getbankruptcy(money)==false)
             {
-                bank.getuser()[c].getmoney(money);
-            }   
-            else if(renewal(bank , c)) 
-            {
-                bank.getuser()[c].getmoney(money);//bardaasht
+                if(bank.getuser()[c].getstatus())
+                {
+                    bank.getuser()[c].getmoney(money);
+                    bank.getbankmoney(money);
+                }   
+                else if(renewal(bank , c)) 
+                {
+                    bank.getuser()[c].getmoney(money);//bardaasht
+                    bank.getbankmoney(money);
+                }
             }            
         }
     }
@@ -169,7 +206,7 @@ void transfer(Bank & bank)
         return;
     }
     int c3;
-    if(s2[2].find('.') <= s2[2].size())//for format -> username:IP:IP:money
+    if(s2[2].find('.')<= s2[2].size())//for format -> username:IP:IP:money
     {
         for (size_t i = 0; i < bank.getusernumber(); i++)
         {
@@ -178,10 +215,12 @@ void transfer(Bank & bank)
                 c3 = i;
                 break;
             }
+            if(i +1 == bank.getusernumber())
+            cout<<"IP not find"<<s2[2]<<endl;
         }
-        cout<<"IP not find"<<endl;
+        cout<<"sa"<<c3<<endl;
     }
-    else//for format -> username:IP:username:money
+    else if(s2[2].find('.') > s2[2].size())//for format -> username:IP:username:money
     {
         c3=bank.getuserindex(s2[2]); 
         if(c3 < 0)
@@ -193,8 +232,11 @@ void transfer(Bank & bank)
     int c4;
     transaction trs;
     stringstream(s2[3])>>c4;
+    if(bank.getbankruptcy(c4) ==true)
+    {
+        return;
+    }
     string transfers = "";
-
     bank.getuser()[c].getmoney(c4);//bardasht
     transfers = "transfer to "+ bank.getuser()[c3].getusername();
     trs.settransaction(c4,transfers);
@@ -215,14 +257,13 @@ void addprofits(Bank & bank)
     if(c >= 0)
     {   transaction trs;
         int c1 = bank.getuser()[c].getmoney();
-        cout<<c1<<endl;
         if(bank.getuser()[c].setprofits())//agar sood variz shod
         {
-            
             int c2 = bank.getuser()[c].getmoney();
             trs.settransaction(c2-c1 , "profits");//c2 -c1 = sood
             bank.setTransaction(trs);
             bank.getuser()[c].Transaction(trs);
+            bank.getbankmoney(c2-c1);
         }
     }
 }
@@ -317,10 +358,10 @@ void printuserinfo(Bank & bank, int i)
 
        for(int j = 0 ; j< bank.getuser()[i].GetTransaction().size() ; j++)
        cout<<"transaction type : " <<bank.getuser()[i].GetTransaction()[j].transactiontype()
-           <<"transaction money : "<<bank.getuser()[i].GetTransaction()[j].transactionmoney()
-           <<"transaction date : " <<time(NULL)/2-bank.getuser()[i].GetTransaction()[j].transactiondate()/2
-           <<"days ago"<<endl;
-       
+           <<"\ttransaction money : "<<bank.getuser()[i].GetTransaction()[j].transactionmoney()
+           <<"\ttransaction date : " <<(time(NULL)-bank.getuser()[i].GetTransaction()[j].transactiondate())/2
+           <<" days ago"<<endl;
+       //cout<<time(NULL);
 }
 void getloan(Bank & bank)
 {
@@ -350,10 +391,11 @@ void getloan(Bank & bank)
     else if(bank.getuser()[c].setloan(c2, false))
     {
         transaction trs;
-        trs.settransaction(c2 , "getloan");
+        trs.settransaction(c2 , "get loan");
         bank.setTransaction(trs);
         bank.getuser()[c].Transaction(trs);
         bank.getbankmoney(c2);
+        bank.setbankloan(c2*20/100 + c2);
         cout<<"you now have loan"<<endl;
     }
 }
@@ -371,12 +413,15 @@ void payloan(Bank & bank)
     }
     int c2 ;
     stringstream(s1[1])>>c2;
-    if(bank.getuser()[c].getloan()< c2)
+    if(bank.getuser()[c].getloan()< c2)//if user loan is smaller than money
     {
         bank.getuser()[c].getloan(c2 - bank.getuser()[c].getloan());
         bank.setbankmoney(c2);
         transaction trs;
-        trs.settransaction(c2-bank.getuser()[c].getloan() , "payloan");
+        trs.settransaction(c2-bank.getuser()[c].getloan() , "pay loan");
+        bank.setTransaction(trs);
+        bank.getuser()[c].Transaction(trs);
+        bank.setbankloan(-1*c2);
         return;
     }
 }

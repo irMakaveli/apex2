@@ -15,7 +15,7 @@ user::user(int i)
 }
 void transaction::settransaction(int i , string s)//transaction info
 {
-    date = time(NULL)*2 ;
+    date = time(NULL) ;
     money = i;
     type = s;
 }
@@ -233,7 +233,7 @@ int user::getstartdate()
 }
 void user::setstartdate()
 {
-    this->startdate = time(NULL)*2;
+    this->startdate = time(NULL);
     setenddate(2);
     return;
 }
