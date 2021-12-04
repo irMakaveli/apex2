@@ -18,9 +18,15 @@ int main()
         cout<<"Enter your command"<<endl;
         string s;
         cin>>s;
+        if(s=="creates" && !bank.getbankruptcy())
+        {
+            creates(bank);
+        }
         if(s=="create" && !bank.getbankruptcy())
         {
-            create(bank);
+            string str;
+            cin>>str;
+            create(bank , str);
         }
         else if(s=="add_ip")
         {

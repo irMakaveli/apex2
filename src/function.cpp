@@ -22,10 +22,20 @@ void help()
     <<"help -> help"<<endl
     <<"exit -> exit"<<endl;
 }
-void create(Bank & bank)//add a user
+void creates(Bank & bank)//add mutiple user
 {
     string str;
     cin>>str;
+    vector<string>s;
+    brain(str ,s , ';');
+    for(int i = 0 ; i < s.size() ; i++)
+    {
+        create(bank , s[i]);   
+    }
+}
+void create(Bank & bank , string str)//add a user
+{
+    
     user d(0);
     vector<string>s1;
     brain(str , s1, ':');//separate str
@@ -419,7 +429,7 @@ void payloan(Bank & bank)
     }
     int c2 ;
     stringstream(s1[1])>>c2;
-    if(bank.getuser()[c].getloan()< c2)//if user loan is smaller than money
+    if(bank.getuser()[c].getloan()< c2)//if user loan value is smaller than money
     {
         bank.getuser()[c].getloan(c2 - bank.getuser()[c].getloan());
         bank.setbankmoney(c2);

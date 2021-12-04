@@ -6,7 +6,8 @@
 
 std::vector<std::string>  brain(std::string , std::vector<std::string> & , char);
 bool renewal(Bank &, int);
-void create(Bank &);
+void create(Bank & , std::string);
+void creates(Bank &);
 void addip(Bank &);
 void renewal(Bank &);
 void deposit(Bank &);
